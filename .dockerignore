@@ -1,0 +1,7 @@
+.env
+.env.example
+.git/
+.github/
+
+**/*.log
+**/*.tmp
