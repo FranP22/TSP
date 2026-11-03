@@ -10,6 +10,8 @@ namespace TSP.Controller.Extensions
         {
             services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
             return services;
         }
     }

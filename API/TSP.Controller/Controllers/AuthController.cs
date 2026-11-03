@@ -25,7 +25,25 @@ namespace TSP.Controller.Controllers
         {
             var response = await _sender.Send(new LoginRequest(request));
 
+            if (!response.Success)
+            {
+                return Unauthorized(response);
+            }
+
+            Response.Cookies.SetRefreshTokenCookie(response.Value!.RefreshToken, response.Value.RefreshTokenExpiresAt);
+
             return Ok(response);
+        }
+
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            var refreshToken = Request.Cookies.GetRefreshTokenCookie();
+
+            var response = await _sender.Send(new LogoutRequest(refreshToken));
+
+            return Ok();
         }
     }
 }

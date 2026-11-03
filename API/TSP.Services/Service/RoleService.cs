@@ -1,4 +1,5 @@
-﻿using TSP.Common.Enum;
+﻿using Microsoft.EntityFrameworkCore;
+using TSP.Common.Enum;
 using TSP.Data;
 using TSP.Services.Service.Interface;
 
@@ -13,9 +14,14 @@ namespace TSP.Services.Service
             _db = db;
         }
 
-        public Task<bool> HasPermissionAsync(string roleId, RolePermission permission)
+        public async Task<bool> HasPermissionAsync(string roleId, RolePermission permission)
         {
-            throw new NotImplementedException();
+            var perm = permission.ToString();
+
+            return await _db.RoleClaims.AnyAsync(x =>
+                x.RoleId == roleId &&
+                x.ClaimType == "Permission" &&
+                x.ClaimValue == perm);
         }
     }
 }

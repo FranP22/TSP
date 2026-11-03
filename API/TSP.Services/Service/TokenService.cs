@@ -46,7 +46,7 @@ namespace TSP.Services.Service
 
             await _db.SaveChangesAsync();
 
-            return CreateTokenResponse(user, session.Id, refreshToken, now);
+            return CreateTokenResponse(user, session.Id, refreshToken, session.ExpiresAt, now);
         }
 
         public async Task<TokenPair?> RefreshTokensAsync(string refreshToken)
@@ -115,7 +115,7 @@ namespace TSP.Services.Service
 
             await _db.SaveChangesAsync();
 
-            return CreateTokenResponse(session.User, session.Id, newRefreshToken, now);
+            return CreateTokenResponse(session.User, session.Id, newRefreshToken, session.ExpiresAt, now);
         }
 
         public async Task RevokeAllSessionAsync(AppUser user, string? reason = null)
@@ -149,7 +149,7 @@ namespace TSP.Services.Service
             await _db.SaveChangesAsync();
         }
 
-        private TokenPair CreateTokenResponse(AppUser user, string sessionId, string refreshToken, DateTime now)
+        private TokenPair CreateTokenResponse(AppUser user, string sessionId, string refreshToken, DateTime refreshTokenExpiresAt, DateTime now)
         {
             var accessTokenExpiresAt = now.AddMinutes(_jwtOpt.AccessTokenMinutes);
 
@@ -190,7 +190,8 @@ namespace TSP.Services.Service
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken,
-                AccessTokenExpiresAt = accessTokenExpiresAt
+                AccessTokenExpiresAt = accessTokenExpiresAt,
+                RefreshTokenExpiresAt = refreshTokenExpiresAt
             };
         }
     }

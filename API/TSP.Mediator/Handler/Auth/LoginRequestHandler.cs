@@ -20,7 +20,25 @@ namespace TSP.Mediator.Handler.Auth
 
         public async Task<BaseResponse<TokenPair>> Handle(LoginRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var dto = request.Dto;
+
+            var tokens = await _auth.LoginAsync(dto.Email, dto.Password);
+
+            if (tokens == null)
+            {
+                return new BaseResponse<TokenPair>()
+                {
+                    Success = false,
+                    Message = "Invalid username or password."
+                };
+            }
+
+            return new BaseResponse<TokenPair>()
+            {
+                Success = true,
+                Message = "Successfuly logged in.",
+                Value = tokens
+            };
         }
     }
 }

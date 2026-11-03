@@ -8,5 +8,7 @@ namespace TSP.Common.Dto.Security
         [JsonIgnore]
         public string RefreshToken { get; set; }
         public DateTime AccessTokenExpiresAt { get; set; }
+        [JsonIgnore]
+        public DateTime RefreshTokenExpiresAt { get; set; }
     }
 }
