@@ -1,6 +1,11 @@
 using DotNetEnv;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Models;
+using Serilog;
+using TSP.Api.Middleware;
 using TSP.Data;
 using TSP.Data.Extensions;
+using TSP.Mediator.Dto.Response;
 using TSP.Mediator.Extensions;
 using TSP.Services.Dependency;
 
@@ -10,20 +15,86 @@ var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
 
+builder.Host.UseSerilog((ctx, lc) =>
+{
+    lc.ReadFrom.Configuration(ctx.Configuration);
+});
+        
 builder.Services.AddMediator();
 
 builder.Services.AddDatabase(config);
 
 builder.Services.AddServices();
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(x => x.Value?.Errors.Count > 0)
+                .SelectMany(x => x.Value!.Errors.Select(e =>
+                {
+                    var message = !string.IsNullOrEmpty(e.ErrorMessage) ? e.ErrorMessage : "Invalid value.";
+
+                    var error = $"{x.Key}: {message}";
+
+                    return error;
+                }))
+                .ToList();
+
+            var response = new BaseResponse()
+            {
+                Success = false,
+                Message = "Validation failed.",
+                Errors = errors
+            };
+
+            return new BadRequestObjectResult(response);
+        };
+    });
+
+// builder.Services.AddCors();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Scheme = "bearer",
+            Description = "Enter your JWT access token."
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+        {
+            {
+                new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference()
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+
+        options.SwaggerDoc("v1", new OpenApiInfo
+        {
+            Title = "API",
+            Version = "v1",
+        });
+    });
+}
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    //app.MapOpenApi();
-}
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
@@ -32,8 +103,17 @@ await using (var scope = app.Services.CreateAsyncScope())
     await DbSeeder.SeedAsync(db);
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

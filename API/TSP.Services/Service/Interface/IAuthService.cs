@@ -1,7 +1,9 @@
-﻿namespace TSP.Services.Service.Interface
+﻿using TSP.Common.Dto.Security;
+
+namespace TSP.Services.Service.Interface
 {
     public interface IAuthService
     {
-        Task LoginAsync(string email,  string password);
+        Task<TokenPair?> LoginAsync(string email,  string password);
     }
 }

@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSP.Controller.Extensions;
+using TSP.Mediator.Dto.Request.Auth;
+using TSP.Mediator.Request.Auth;
 
 namespace TSP.Controller.Controllers
 {
@@ -18,9 +21,11 @@ namespace TSP.Controller.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            return Ok();
+            var response = await _sender.Send(new LoginRequest(request));
+
+            return Ok(response);
         }
     }
 }

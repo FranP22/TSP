@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TSP.Common\TSP.Common.csproj" />
+    <ProjectReference Include="..\TSP.Mediator\TSP.Mediator.csproj" />
+  </ItemGroup>
+
 </Project>

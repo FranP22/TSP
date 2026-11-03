@@ -2,12 +2,13 @@
 {
     public class BaseResponse<T> : BaseResponse
     {
-        public T Value { get; set; }
+        public T? Value { get; set; }
     }
 
     public class BaseResponse
     {
         public bool Success { get; set; }
         public string Message { get; set; }
+        public List<string>? Errors { get; set; }
     }
 }

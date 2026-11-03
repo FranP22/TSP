@@ -9,6 +9,8 @@ namespace TSP.Services.Dependency
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             return services;
         }

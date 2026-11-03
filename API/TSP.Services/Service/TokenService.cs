@@ -161,7 +161,8 @@ namespace TSP.Services.Service
 
                 new("role", user.Role.Name),
                 new("role_id", user.RoleId),
-                new("session_id", sessionId),
+                //new("session_id", sessionId),
+                new("active", user.IsActive.ToString()),
                 new("auth_version", user.AuthVersion.ToString())
             };
 

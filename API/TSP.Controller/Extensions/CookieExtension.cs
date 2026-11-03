@@ -37,5 +37,12 @@ namespace TSP.Controller.Extensions
 
             return cookies;
         }
+
+        public static string? GetRefreshTokenCookie(this IRequestCookieCollection cookies)
+        {
+            var refreshToken = cookies["refreshToken"];
+
+            return refreshToken;
+        }
     }
 }
