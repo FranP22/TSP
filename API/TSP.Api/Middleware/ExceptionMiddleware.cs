@@ -33,7 +33,7 @@ namespace TSP.Api.Middleware
                 context.Response.StatusCode = response.StatusCode;
                 context.Response.ContentType = "application/json";
 
-                await context.Response.WriteAsync(JsonSerializer.Serialize(response.Body), context.RequestAborted);
+                await context.Response.WriteAsJsonAsync(response.Body, context.RequestAborted);
             }
         }
 

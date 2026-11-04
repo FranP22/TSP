@@ -1,6 +1,4 @@
 networks:
-  frontend:
-    driver: bridge
   api:
     driver: bridge
   data:
@@ -11,16 +9,6 @@ volumes:
   postgres_data:
   
 services:
-  frontend:
-    build:
-      context: ./Frontend
-      args:
-        VITE_API_URL: /8080/api
-    expose:
-      - "80"
-    networks:
-      - frontend
-
   api:
     build:
       context: ./API

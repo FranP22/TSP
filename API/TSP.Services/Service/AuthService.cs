@@ -33,6 +33,11 @@ namespace TSP.Services.Service
             return await _token.GenerateTokensAsync(user);
         }
 
+        public async Task<TokenPair?> RefreshAsync(string refreshToken)
+        {
+            return await _token.RefreshTokensAsync(refreshToken);
+        }
+
         public async Task LogoutAsync(string refreshToken)
         {
             var tokenHash = SecurityHelper.Hash(refreshToken);

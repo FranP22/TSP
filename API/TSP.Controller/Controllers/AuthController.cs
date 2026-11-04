@@ -50,6 +50,24 @@ namespace TSP.Controller.Controllers
             return Ok(response);
         }
 
+        [HttpPost("refresh")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Refresh()
+        {
+            var refreshToken = Request.Cookies.GetRefreshTokenCookie();
+
+            var response = await _sender.Send(new RefreshRequest(refreshToken));
+
+            if (!response.Success)
+            {
+                return Unauthorized(response);
+            }
+
+            Response.Cookies.SetRefreshTokenCookie(response.Value!.RefreshToken, response.Value.RefreshTokenExpiresAt);
+
+            return Ok(response);
+        }
+
         [HttpGet("test-auth")]
         [HasPermission(RolePermission.UserGet)]
         public async Task<IActionResult> Test()

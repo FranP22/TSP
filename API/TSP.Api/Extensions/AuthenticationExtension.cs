@@ -3,10 +3,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using TSP.Common.Options;
 using TSP.Controller.Extensions;
+using TSP.Mediator.Dto.Response;
 
 namespace TSP.Api.Extensions
 {
-    public static class AuthenticationExtensions
+    public static class AuthenticationExtension
     {
         public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration config)
         {
@@ -50,6 +51,23 @@ namespace TSP.Api.Extensions
 
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.FromSeconds(30)
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = async context =>
+                        {
+                            context.HandleResponse();
+
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+
+                            await context.Response.WriteAsJsonAsync(new BaseResponse()
+                            {
+                                Success = false,
+                                Message = "Unauthorized."
+                            });
+                        }
                     };
                 });
 

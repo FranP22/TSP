@@ -87,6 +87,7 @@ namespace TSP.Services.Service
                 }
 
                 await transaction.CommitAsync();
+                return null;
             }
 
             // Validate session
@@ -114,6 +115,8 @@ namespace TSP.Services.Service
             session.ExpiresAt = now.AddDays(_jwtOpt.RefreshTokenDays);
 
             await _db.SaveChangesAsync();
+
+            await transaction.CommitAsync();
 
             return CreateTokenResponse(session.User, session.Id, newRefreshToken, session.ExpiresAt, now);
         }

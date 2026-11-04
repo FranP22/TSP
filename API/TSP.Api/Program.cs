@@ -63,42 +63,7 @@ builder.Services
 
 // builder.Services.AddCors();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddSwaggerGen(options =>
-    {
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
-        {
-            Name = "Authorization",
-            Type = SecuritySchemeType.Http,
-            BearerFormat = "JWT",
-            In = ParameterLocation.Header,
-            Scheme = "bearer",
-            Description = "Enter your JWT access token."
-        });
-
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-        {
-            {
-                new OpenApiSecurityScheme()
-                {
-                    Reference = new OpenApiReference()
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-
-        options.SwaggerDoc("v1", new OpenApiInfo
-        {
-            Title = "API",
-            Version = "v1",
-        });
-    });
-}
+builder.Services.AddSwagger(builder.Environment);
 
 var app = builder.Build();
 
