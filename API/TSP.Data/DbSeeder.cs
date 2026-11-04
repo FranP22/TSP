@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TSP.Common.Dto.Db;
 using TSP.Common.Enum;
+using TSP.Common.Helper;
 
 namespace TSP.Data
 {
@@ -12,10 +13,10 @@ namespace TSP.Data
 
             await CreateDefaultRoles(db);
 
-            await RemoveInvalidPermissionClaims(db);
+            await CreateDefaultAdminUser(db);
         }
 
-        public static async Task CreateDefaultRoles(AppDbContext db)
+        private static async Task CreateDefaultRoles(AppDbContext db)
         {
             var roleNames = new List<string>()
             {
@@ -69,15 +70,69 @@ namespace TSP.Data
             }
 
             await db.SaveChangesAsync();
+
+            await RemoveInvalidPermissionClaims(db);
         }
 
-        public static async Task RemoveInvalidPermissionClaims(AppDbContext db)
+        private static async Task RemoveInvalidPermissionClaims(AppDbContext db)
         {
             var validPermissions = Enum.GetNames<RolePermission>();
 
             await db.RoleClaims
                 .Where(x => x.ClaimType == "Permission" && !validPermissions.Contains(x.ClaimValue))
                 .ExecuteDeleteAsync();
+        }
+
+        private static async Task CreateDefaultAdminUser(AppDbContext db)
+        {
+            var adminRoleId = await db.Roles
+                .Where(x => x.IsAdmin && x.Name == "Admin")
+                .Select(x => x.Id)
+                .FirstOrDefaultAsync();
+
+            if (adminRoleId == null)
+                throw new InvalidOperationException("Admin role not found.");
+
+            var adminExists = await db.Users
+                .Where(x => adminRoleId == x.RoleId)
+                .AnyAsync();
+
+            if (adminExists) return;
+
+            var adminEmail = Environment.GetEnvironmentVariable("DEFAULT_ADMIN_EMAIL");
+
+            var adminPassword = Environment.GetEnvironmentVariable("DEFAULT_ADMIN_PASSWORD");
+
+            if (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword)) 
+                throw new InvalidOperationException("Admin credentials are missing.");
+
+            var adminEmailNormalized = adminEmail.Trim().ToUpperInvariant();
+
+            var adminUser = await db.Users.Where(x => x.EmailNormalized == adminEmailNormalized).FirstOrDefaultAsync();
+
+            if (adminUser != null)
+            {
+                adminUser.RoleId = adminRoleId;
+
+                await db.SaveChangesAsync();
+
+                return;
+            }
+
+            adminUser = new AppUser()
+            {
+                Email = adminEmail,
+                EmailNormalized = adminEmailNormalized,
+                RoleId = adminRoleId,
+            };
+
+            var adminPasswordHash = SecurityHelper.CreatePasswordHash(adminUser, adminPassword);
+
+            adminUser.PasswordHash = adminPasswordHash;
+
+            db.Users.Add(adminUser);
+
+            await db.SaveChangesAsync();
         }
     }
 }

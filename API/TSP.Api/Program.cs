@@ -2,7 +2,9 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using TSP.Api.Extensions;
 using TSP.Api.Middleware;
+using TSP.Common.Options;
 using TSP.Data;
 using TSP.Data.Extensions;
 using TSP.Mediator.Dto.Response;
@@ -15,6 +17,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var config = builder.Configuration;
 
+builder.Services.Configure<JwtOptions>(config.GetSection(JwtOptions.SectionName));
+
 builder.Host.UseSerilog((ctx, lc) =>
 {
     lc.ReadFrom.Configuration(ctx.Configuration);
@@ -25,6 +29,8 @@ builder.Services.AddMediator();
 builder.Services.AddDatabase(config);
 
 builder.Services.AddServices();
+
+builder.Services.AddJwt(config);
 
 builder.Services
     .AddControllers()

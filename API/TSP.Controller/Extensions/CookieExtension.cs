@@ -10,7 +10,7 @@ namespace TSP.Controller.Extensions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
 
                 Expires = new DateTimeOffset(
                     DateTime.SpecifyKind(
@@ -31,7 +31,7 @@ namespace TSP.Controller.Extensions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Lax,
+                SameSite = SameSiteMode.None,
                 Path = "api/auth"
             });
 

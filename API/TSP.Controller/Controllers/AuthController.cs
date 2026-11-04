@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSP.Common.Enum;
+using TSP.Controller.Auth;
 using TSP.Controller.Extensions;
 using TSP.Mediator.Dto.Request.Auth;
 using TSP.Mediator.Request.Auth;
@@ -43,7 +45,16 @@ namespace TSP.Controller.Controllers
 
             var response = await _sender.Send(new LogoutRequest(refreshToken));
 
-            return Ok();
+            Response.Cookies.DeleteRefreshTokenCookie();
+
+            return Ok(response);
+        }
+
+        [HttpGet("test-auth")]
+        [HasPermission(RolePermission.UserGet)]
+        public async Task<IActionResult> Test()
+        {
+            return Ok("Success");
         }
     }
 }

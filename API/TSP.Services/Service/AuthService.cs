@@ -20,16 +20,30 @@ namespace TSP.Services.Service
         public async Task<TokenPair?> LoginAsync(string email, string password)
         {
             var user = await _db.Users
+                .Include(x => x.Role)
                 .Where(x => x.Email == email)
                 .FirstOrDefaultAsync();
 
             if (user == null) return null;
 
-            var hashedPassword = SecurityHelper.CreatePasswordHash(user, password);
+            var verified = SecurityHelper.VerifyPassword(user, password);
 
-            if (user.PasswordHash != hashedPassword) return null;
+            if (!verified) return null;
 
             return await _token.GenerateTokensAsync(user);
+        }
+
+        public async Task LogoutAsync(string refreshToken)
+        {
+            var tokenHash = SecurityHelper.Hash(refreshToken);
+
+            var sessionId = await _db.UserSessions.Where(x => x.RefreshTokenHash == tokenHash).Select(x => x.Id).FirstOrDefaultAsync();
+
+            if (sessionId == null) return;
+
+            await _token.RevokeSessionAsync(sessionId, "Logout");
+
+            return;
         }
     }
 }

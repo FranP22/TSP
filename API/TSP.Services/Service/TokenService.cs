@@ -167,10 +167,10 @@ namespace TSP.Services.Service
             };
 
             // Add custom role permissions/claims.
-            foreach (var roleClaim in user.Role.Claims)
+            /*foreach (var roleClaim in user.Role.Claims)
             {
                 claims.Add(new Claim(roleClaim.ClaimType, roleClaim.ClaimValue));
-            }
+            }*/
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOpt.SigningKey));
 

@@ -31,5 +31,14 @@ namespace TSP.Common.Helper
 
             return hashedPassword;
         }
+
+        public static bool VerifyPassword(AppUser user, string password)
+        {
+            var hasher = new PasswordHasher<AppUser>();
+
+            var result = hasher.VerifyHashedPassword(user, user.PasswordHash, password);
+
+            return result != PasswordVerificationResult.Failed;
+        }
     }
 }
