@@ -74,19 +74,26 @@ await using (var scope = app.Services.CreateAsyncScope())
     await DbSeeder.SeedAsync(db);
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+app.UseForwardedHeaders();
+
+if (app.Environment.IsProduction())
+{
+    //app.UseHsts();
+    //app.UseRateLimiter();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.Run();
