@@ -16,12 +16,12 @@ namespace TSP.Data
             modelBuilder.CreateAppModel();
         }
 
-        public DbSet<AppUser> Users { get; set; }
-        public DbSet<AppRole> Roles { get; set; }
-        public DbSet<AppRoleClaim> RoleClaims { get; set; }
-        public DbSet<AppUserSession> UserSessions { get; set; }
-        public DbSet<AppUsedRefreshTokens> UsedRefreshTokens { get; set; }
-        public DbSet<AppOrder> Orders { get; set; }
-        public DbSet<AppProduct> Products { get; set; }
+        public virtual DbSet<AppUser> Users { get; set; }
+        public virtual DbSet<AppRole> Roles { get; set; }
+        public virtual DbSet<AppRoleClaim> RoleClaims { get; set; }
+        public virtual DbSet<AppUserSession> UserSessions { get; set; }
+        public virtual DbSet<AppUsedRefreshTokens> UsedRefreshTokens { get; set; }
+        public virtual DbSet<AppOrder> Orders { get; set; }
+        public virtual DbSet<AppProduct> Products { get; set; }
     }
 }
