@@ -1,14 +1,46 @@
 networks:
-  api:
+  entry:
     driver: bridge
+  frontend:
+    driver: bridge
+    internal: true
+  backend:
+    driver: bridge
+    internal: true
   data:
     driver: bridge
     internal: true
   
 volumes:
   postgres_data:
+  redis_data:
   
 services:
+  proxy:
+    build:
+      context: ./Proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./Proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+#      - frontend
+      - api
+    networks:
+      - entry
+      - frontend
+      - backend
+      
+#  frontend:
+#    build:
+#      context: ./Frontend
+#      args:
+#        VITE_API_URL: /api
+#    expose:
+#      - "80"
+#    networks:
+#      - frontend
+      
   api:
     build:
       context: ./API
@@ -20,6 +52,7 @@ services:
       DEFAULT_ADMIN_PASSWORD: ${DEFAULT_ADMIN_PASSWORD}
       
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      ConnectionStrings__Redis: redis:6379
       Jwt__SigningKey: ${Jwt__SigningKey}
       Jwt__Issuer: ${Jwt__Issuer}
       Jwt__Audience: ${Jwt__Audience}
@@ -29,7 +62,17 @@ services:
       db:
         condition: service_healthy
     networks:
-      - api
+      - backend
+      - data
+      
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
       - data
       
   db:
@@ -41,8 +84,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    expose:
-      - "5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s

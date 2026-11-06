@@ -28,7 +28,7 @@ builder.Services.AddMediator();
 
 builder.Services.AddDatabase(config);
 
-builder.Services.AddServices();
+builder.Services.AddServices(config);
 
 builder.Services.AddJwt(config);
 
