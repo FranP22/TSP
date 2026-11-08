@@ -36,7 +36,8 @@ api.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config as RetryableConfig | undefined;
 
-        if (!originalRequest || error.response?.status !== 401) {
+        if (!originalRequest) {
+            //handleApiError(error);
             return Promise.reject(error);
         }
 
@@ -62,7 +63,7 @@ api.interceptors.response.use(
             return api(originalRequest);
         } catch (refreshError) {
 
-            authStore.logout()
+            authStore.clearAuth()
 
             return Promise.reject(refreshError);
         }
