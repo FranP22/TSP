@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { useAuthStore } from '@/stores/authStore'
-    import type { LoginRequest } from '@/types/auth'
+    import type { LoginRequest } from '@/types/api/authTypes'
     import { ref, reactive } from 'vue'
     import { RouterLink, useRouter } from 'vue-router'
 

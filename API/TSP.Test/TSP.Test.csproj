@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="coverlet.collector" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Moq" />
+    <PackageReference Include="Moq.EntityFrameworkCore" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit.Analyzers" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tests\API\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TSP.Common\TSP.Common.csproj" />
+    <ProjectReference Include="..\TSP.Data\TSP.Data.csproj" />
+    <ProjectReference Include="..\TSP.Mediator\TSP.Mediator.csproj" />
+    <ProjectReference Include="..\TSP.Services\TSP.Services.csproj" />
+  </ItemGroup>
+
+</Project>
