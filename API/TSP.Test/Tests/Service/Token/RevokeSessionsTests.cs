@@ -10,6 +10,7 @@ using TSP.Services.Service;
 
 namespace TSP.Test.Tests.Service.Token
 {
+    [TestFixture]
     public class RevokeSessionsTests : BaseTest
     {
         private TokenService _token;

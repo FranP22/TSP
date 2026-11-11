@@ -7,6 +7,7 @@ using TSP.Services.Service.Interface;
 
 namespace TSP.Test.Tests.Service.Role
 {
+    [TestFixture]
     class HasPermissionTests : BaseTest
     {
         private RoleService _role;

@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TSP.Common\TSP.Common.csproj" />
+    <ProjectReference Include="..\TSP.Controller\TSP.Controller.csproj" />
     <ProjectReference Include="..\TSP.Data\TSP.Data.csproj" />
     <ProjectReference Include="..\TSP.Mediator\TSP.Mediator.csproj" />
     <ProjectReference Include="..\TSP.Services\TSP.Services.csproj" />

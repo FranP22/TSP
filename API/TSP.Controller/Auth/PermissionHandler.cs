@@ -16,7 +16,7 @@ namespace TSP.Controller.Auth
         {
             var roleId = context.User.FindFirst("role_id")?.Value;
 
-            if (string.IsNullOrEmpty(roleId)) return;
+            if (string.IsNullOrWhiteSpace(roleId)) return;
 
             // TODO: Add cache
             var hasPermission = await _role.HasPermissionAsync(roleId, requirement.Permission);

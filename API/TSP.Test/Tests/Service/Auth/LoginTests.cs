@@ -11,6 +11,7 @@ using TSP.Services.Service.Interface;
 
 namespace TSP.Test.Tests.Service.Auth
 {
+    [TestFixture]
     public class LoginTests : BaseTest
     {
         private AuthService _auth;
@@ -20,7 +21,8 @@ namespace TSP.Test.Tests.Service.Auth
         private AppUser _user;
         private AppRole _role;
 
-        private string _password;
+        private const string _password = "TestPassword123!";
+        private const string _email = "email@gmail.com";
 
         [SetUp]
         public async Task SetUp()
@@ -45,12 +47,10 @@ namespace TSP.Test.Tests.Service.Auth
                 NameNormalized = "ROLE"
             };
 
-            _password = Guid.NewGuid().ToString();
-
             _user = new AppUser()
             {
-                Email = "email@gmail.com",
-                EmailNormalized = "EMAIL@GMAIL.COM",
+                Email = _email,
+                EmailNormalized = _email.Trim().ToUpperInvariant(),
                 RoleId = _role.Id
             };
 
@@ -75,18 +75,15 @@ namespace TSP.Test.Tests.Service.Auth
             });
         }
 
+        [TestCase("", "")]
+        [TestCase("test@gmail.com", "")]
+        [TestCase("", "Password")]
+        [TestCase("test@gmail.com", _password)]
+        [TestCase(_email, "Password")]
         [Test]
-        public async Task Login_WhenInvalidEmail_ReturnsNull()
+        public async Task Login_WhenInvalidInformation_ReturnsNull(string email, string password)
         {
             var result = await _auth.LoginAsync("test@gmail.com", _password);
-
-            Assert.That(result, Is.Null);
-        }
-
-        [Test]
-        public async Task Login_WhenInvalidPassword_ReturnsNull()
-        {
-            var result = await _auth.LoginAsync(_user.Email, "test_password");
 
             Assert.That(result, Is.Null);
         }

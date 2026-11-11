@@ -11,6 +11,7 @@ using TSP.Services.Service;
 
 namespace TSP.Test.Tests.Service.Token
 {
+    [TestFixture]
     public class RefreshTokensTests : BaseTest
     {
         private TokenService _token;

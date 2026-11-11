@@ -7,6 +7,7 @@ using TSP.Services.Service.Interface;
 
 namespace TSP.Test.Tests.Service.Auth
 {
+    [TestFixture]
     public class LogoutTests : BaseTest
     {
         private AuthService _auth;

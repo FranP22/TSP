@@ -6,6 +6,7 @@ using TSP.Services.Service;
 
 namespace TSP.Test.Tests.Service.Role
 {
+    [TestFixture]
     public class UpdateRoleClaimsTests : BaseTest
     {
         private RoleService _role;
