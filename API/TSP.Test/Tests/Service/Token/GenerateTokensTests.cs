@@ -10,7 +10,7 @@ using TSP.Services.Service;
 namespace TSP.Test.Tests.Service.Token
 {
     [TestFixture]
-    public class GenerateTokensTest : BaseTest
+    public class GenerateTokensTests : BaseTest
     {
         private TokenService _token;
 
@@ -19,12 +19,6 @@ namespace TSP.Test.Tests.Service.Token
         private AppUser _user;
         private AppRole _role;
         private List<AppRoleClaim> _claims;
-
-        [TearDown]
-        public void TearDown()
-        {
-            _db?.Dispose();
-        }
 
         [SetUp]
         public async Task SetUp()

@@ -7,7 +7,7 @@ namespace TSP.Services.Service.Interface
     public interface IRoleService
     {
         Task<bool> HasPermissionAsync(string roleId, RolePermission permission);
-        Task<AppRole?> CreateRole(string roleName, bool isDefault = false, bool isAdmin = false);
-        Task<bool> UpdateRoleClaims(string roleId, List<ClaimDefinition> claims);
+        Task<AppRole?> CreateRoleAsync(string roleName, bool isDefault = false, bool isAdmin = false);
+        Task<bool> UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims);
     }
 }

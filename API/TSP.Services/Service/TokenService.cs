@@ -131,6 +131,8 @@ namespace TSP.Services.Service
 
             foreach (var session in sessions)
             {
+                if (session == null || session.RevokedAt != null) continue;
+
                 session.RevokedAt = now;
                 session.RevokeReason = reason;
             }
@@ -164,16 +166,9 @@ namespace TSP.Services.Service
 
                 new("role", user.Role.Name),
                 new("role_id", user.RoleId),
-                //new("session_id", sessionId),
                 new("active", user.IsActive.ToString()),
                 new("auth_version", user.AuthVersion.ToString())
             };
-
-            // Add custom role permissions/claims.
-            /*foreach (var roleClaim in user.Role.Claims)
-            {
-                claims.Add(new Claim(roleClaim.ClaimType, roleClaim.ClaimValue));
-            }*/
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOpt.SigningKey));
 

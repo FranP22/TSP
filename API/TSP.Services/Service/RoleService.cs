@@ -17,7 +17,7 @@ namespace TSP.Services.Service
             _db = db;
         }
 
-        public async Task<AppRole?> CreateRole(string roleName, bool isDefault = false, bool isAdmin = false)
+        public async Task<AppRole?> CreateRoleAsync(string roleName, bool isDefault = false, bool isAdmin = false)
         {
             var normalizedName = roleName.Trim().ToUpperInvariant();
 
@@ -43,7 +43,7 @@ namespace TSP.Services.Service
             return role;
         }
 
-        public async Task<bool> UpdateRoleClaims(string roleId, List<ClaimDefinition> claims)
+        public async Task<bool> UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims)
         {
             var role = await _db.Roles
                 .Where(x => x.Id == roleId)
