@@ -51,7 +51,8 @@ namespace TSP.Test.Tests.Service.Auth
             {
                 Email = _email,
                 EmailNormalized = _email.Trim().ToUpperInvariant(),
-                RoleId = _role.Id
+                RoleId = _role.Id,
+                IsActive = true
             };
 
             _user.PasswordHash = SecurityHelper.CreatePasswordHash(_user, _password);
@@ -65,6 +66,21 @@ namespace TSP.Test.Tests.Service.Auth
         [Test]
         public async Task Login_WhenSuccess_ReturnsTokenPair()
         {
+            var result = await _auth.LoginAsync(_user.Email, _password);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result?.AccessToken, Is.EqualTo("Access Token"));
+                Assert.That(result?.RefreshToken, Is.EqualTo("Refresh Token"));
+            });
+        }
+
+        [Test]
+        public async Task Login_WhenInactive_ReturnsNull()
+        {
+            _user.IsActive = false;
+
             var result = await _auth.LoginAsync(_user.Email, _password);
 
             Assert.Multiple(() =>

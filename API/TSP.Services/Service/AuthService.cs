@@ -22,6 +22,7 @@ namespace TSP.Services.Service
             var user = await _db.Users
                 .Include(x => x.Role)
                 .Where(x => x.Email == email)
+                .Where(x => x.IsActive)
                 .FirstOrDefaultAsync();
 
             if (user == null) return null;
