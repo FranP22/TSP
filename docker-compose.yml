@@ -12,8 +12,8 @@ services:
   api:
     build:
       context: ./API
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       DEFAULT_ADMIN_EMAIL: ${DEFAULT_ADMIN_EMAIL}
