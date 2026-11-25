@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TSP.Common.Dto.Db;
 using TSP.Common.Dto.Security;
 using TSP.Common.Enum;
+using TSP.Common.Exceptions;
 using TSP.Data;
 using TSP.Services.Service.Interface;
 
@@ -43,17 +44,14 @@ namespace TSP.Services.Service
             return role;
         }
 
-        public async Task<bool> UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims)
+        public async Task UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims)
         {
             var role = await _db.Roles
                 .Where(x => x.Id == roleId)
                 .Include(x => x.Claims)
                 .FirstOrDefaultAsync();
 
-            if (role == null)
-            {
-                return false;
-            }
+            if (role == null) throw new NotFoundException("Role not found.");
 
             var projectPermissions = Enum.GetNames<RolePermission>().ToHashSet();
 
@@ -97,8 +95,6 @@ namespace TSP.Services.Service
             _db.RoleClaims.AddRange(claimsToAdd);
 
             await _db.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<bool> HasPermissionAsync(string roleId, RolePermission permission)

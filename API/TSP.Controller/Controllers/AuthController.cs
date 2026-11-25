@@ -37,6 +37,20 @@ namespace TSP.Controller.Controllers
             return Ok(response);
         }
 
+        [HttpPost("register")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        {
+            var response = await _sender.Send(new RegisterRequest(request));
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
         [HttpPost("logout")]
         [AllowAnonymous]
         public async Task<IActionResult> Logout()
@@ -66,13 +80,6 @@ namespace TSP.Controller.Controllers
             Response.Cookies.SetRefreshTokenCookie(response.Value!.RefreshToken, response.Value.RefreshTokenExpiresAt);
 
             return Ok(response);
-        }
-
-        [HttpGet("test-auth")]
-        [HasPermission(RolePermission.UserGet)]
-        public async Task<IActionResult> Test()
-        {
-            return Ok("Success");
         }
     }
 }

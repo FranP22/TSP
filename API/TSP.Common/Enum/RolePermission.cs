@@ -10,6 +10,20 @@
         RoleGet,
         RoleCreate,
         RoleUpdate,
-        RoleDelete
+        RoleDelete,
+
+        OrderGet,
+        OrderCreate,
+        OrderUpdate,
+        OrderDelete,
+
+        OrderGetAny,
+        OrderUpdateAny,
+        OrderDeleteAny,
+
+        ProductGetInactive,
+        ProductCreate,
+        ProductUpdate,
+        ProductDelete
     }
 }

@@ -69,6 +69,29 @@ namespace TSP.Data
                 db.RoleClaims.AddRange(missingClaims);
             }
 
+            // Add missing permissions for users
+            var user = await db.Roles.Where(x => x.Name == "User").Include(x => x.Claims).FirstAsync();
+            var userPermissions = new HashSet<string>() { 
+                RolePermission.OrderGet.ToString(),
+                RolePermission.OrderCreate.ToString(),
+                RolePermission.OrderUpdate.ToString(),
+                RolePermission.OrderDelete.ToString()
+            };
+
+            var currentUserClaims = user.Claims.Where(x => x.ClaimType == "Permission").Select(x => x.ClaimValue).ToHashSet();
+
+            var missingUserClaims = userPermissions
+                .Where(x => !currentUserClaims.Contains(x))
+                .Select(x => new AppRoleClaim()
+                {
+                    RoleId = user.Id,
+                    ClaimType = "Permission",
+                    ClaimValue = x
+                })
+                .ToList();
+
+            db.RoleClaims.AddRange(missingUserClaims);
+
             await db.SaveChangesAsync();
 
             await RemoveInvalidPermissionClaims(db);

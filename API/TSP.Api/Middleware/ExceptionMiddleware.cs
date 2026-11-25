@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
+using TSP.Common.Exceptions;
 using TSP.Mediator.Dto.Response;
 
 namespace TSP.Api.Middleware
@@ -52,6 +53,13 @@ namespace TSP.Api.Middleware
                 {
                     Success = false,
                     Message = "Unauthorized.",
+                    Errors = new List<string> { ex.Message }
+                }),
+
+                NotFoundException => (404, new BaseResponse
+                {
+                    Success = false,
+                    Message = "Not found.",
                     Errors = new List<string> { ex.Message }
                 }),
 

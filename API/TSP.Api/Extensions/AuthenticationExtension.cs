@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using TSP.Common.Options;
 using TSP.Controller.Extensions;
 using TSP.Mediator.Dto.Response;
+using TSP.Services.Service.Interface;
 
 namespace TSP.Api.Extensions
 {
@@ -67,6 +70,41 @@ namespace TSP.Api.Extensions
                                 Success = false,
                                 Message = "Unauthorized."
                             });
+                        },
+
+                        OnForbidden = async context =>
+                        {
+                            context.Response.StatusCode = 403;
+                            context.Response.ContentType = "application/json";
+
+                            await context.Response.WriteAsJsonAsync(new BaseResponse
+                            {
+                                Success = false,
+                                Message = "You don't have permission to perform this action."
+                            });
+                        },
+
+                        OnTokenValidated = async context =>
+                        {
+                            var userId = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+                            var authVersionClaim = context.Principal?.FindFirst("auth_version")?.Value;
+
+                            if (string.IsNullOrEmpty(userId) || !int.TryParse(authVersionClaim, out var tokenVersion))
+                            {
+                                context.Fail("Invalid token.");
+
+                                return;
+                            }
+
+                            var auth = context.HttpContext.RequestServices.GetRequiredService<IAuthService>();
+
+                            var isActive = await auth.IsUserActive(userId);
+
+                            if (!isActive)
+                            {
+                                context.Fail("User is inactive.");
+                            }
                         }
                     };
                 });

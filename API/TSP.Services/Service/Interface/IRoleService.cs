@@ -8,6 +8,6 @@ namespace TSP.Services.Service.Interface
     {
         Task<bool> HasPermissionAsync(string roleId, RolePermission permission);
         Task<AppRole?> CreateRoleAsync(string roleName, bool isDefault = false, bool isAdmin = false);
-        Task<bool> UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims);
+        Task UpdateRoleClaimsAsync(string roleId, List<ClaimDefinition> claims);
     }
 }

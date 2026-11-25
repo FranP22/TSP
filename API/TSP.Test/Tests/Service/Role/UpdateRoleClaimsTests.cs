@@ -65,7 +65,7 @@ namespace TSP.Test.Tests.Service.Role
                 }
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -73,8 +73,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -89,7 +87,7 @@ namespace TSP.Test.Tests.Service.Role
             {
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -97,8 +95,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -118,7 +114,7 @@ namespace TSP.Test.Tests.Service.Role
                 },
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -126,8 +122,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(1));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -147,7 +141,7 @@ namespace TSP.Test.Tests.Service.Role
                 },
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -155,8 +149,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -177,7 +169,7 @@ namespace TSP.Test.Tests.Service.Role
                 },
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -185,8 +177,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -206,7 +196,7 @@ namespace TSP.Test.Tests.Service.Role
                 },
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -214,8 +204,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(3));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -246,7 +234,7 @@ namespace TSP.Test.Tests.Service.Role
                 },
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -254,8 +242,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == RolePermission.UserGet.ToString()), Is.True);
@@ -276,7 +262,7 @@ namespace TSP.Test.Tests.Service.Role
                 }
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var claims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -284,8 +270,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(claims.Count(), Is.EqualTo(2));
 
                 Assert.That(claims.Any(x => x.ClaimValue == "Claim"), Is.False);
@@ -313,7 +297,7 @@ namespace TSP.Test.Tests.Service.Role
                 }
             };
 
-            var result = await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions);
+            Assert.DoesNotThrowAsync(async () => await _role.UpdateRoleClaimsAsync(_existingRole.Id, definitions));
 
             var permissionClaims = await _db.RoleClaims
                 .Where(x => x.RoleId == _existingRole.Id && x.ClaimType == "Permission")
@@ -325,8 +309,6 @@ namespace TSP.Test.Tests.Service.Role
 
             Assert.Multiple(() =>
             {
-                Assert.That(result, Is.True);
-
                 Assert.That(permissionClaims.Count(), Is.EqualTo(2));
                 Assert.That(nonPermissionClaims.Count(), Is.EqualTo(1));
 
