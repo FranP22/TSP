@@ -73,7 +73,7 @@ coverage
 *.suo
 *.ntvs*
 *.njsproj
-*.sln
+#*.sln
 *.sw?
 
 *.tsbuildinfo
