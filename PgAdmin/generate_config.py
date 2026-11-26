@@ -1,7 +1,8 @@
 import json
 import os
 import stat
-import subprocess
+import pwd
+import grp
 
 POSTGRES_DB = os.environ["POSTGRES_DB"]
 POSTGRES_USER = os.environ["POSTGRES_USER"]
@@ -23,6 +24,7 @@ config = {
 }
 
 os.makedirs("/pgadmin4", exist_ok=True)
+os.makedirs("/var/lib/pgadmin", exist_ok=True)
 
 with open("/pgadmin4/servers.json", "w") as file:
     json.dump(config, file, indent=4)
@@ -39,9 +41,18 @@ pgpass = (
 with open("/var/lib/pgadmin/pgpass", "w") as file:
     file.write(pgpass)
 
+uid = pwd.getpwnam("pgadmin").pw_uid
+
+try:
+    gid = grp.getgrnam("pgadmin").gr_gid
+except KeyError:
+    gid = pwd.getpwnam("pgadmin").pw_gid
+
+os.chown("/var/lib/pgadmin/pgpass", uid, gid)
+
+os.chown("/var/lib/pgadmin/pgpass", uid, gid)
 os.chmod("/var/lib/pgadmin/pgpass", stat.S_IRUSR | stat.S_IWUSR)
 
 print("pgAdmin configuration generated successfully.")
 
-# Start the original pgAdmin entrypoint
-subprocess.run(["/entrypoint.sh"], check=True)
+os.execv("/entrypoint.sh", ["/entrypoint.sh"])
